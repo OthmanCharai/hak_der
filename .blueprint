@@ -1,0 +1,65 @@
+created:
+    - app/Http/Controllers/UserController.php
+    - app/Http/Controllers/AccountController.php
+    - app/Http/Controllers/PlanController.php
+    - app/Http/Controllers/InvoiceController.php
+    - app/Http/Controllers/ChildController.php
+    - database/factories/UserFactory.php
+    - database/factories/ChildFactory.php
+    - database/factories/AccountFactory.php
+    - database/factories/PlanFactory.php
+    - database/factories/InvoiceFactory.php
+    - database/migrations/2022_09_28_004554_create_users_table.php
+    - database/migrations/2022_09_28_004555_create_children_table.php
+    - database/migrations/2022_09_28_004556_create_accounts_table.php
+    - database/migrations/2022_09_28_004557_create_plans_table.php
+    - database/migrations/2022_09_28_004558_create_invoices_table.php
+    - database/migrations/2022_09_28_004559_create_plan_user_table.php
+    - app/Models/User.php
+    - app/Models/Child.php
+    - app/Models/Account.php
+    - app/Models/Plan.php
+    - app/Models/Invoice.php
+    - tests/Feature/Http/Controllers/UserControllerTest.php
+    - tests/Feature/Http/Controllers/AccountControllerTest.php
+    - tests/Feature/Http/Controllers/PlanControllerTest.php
+    - tests/Feature/Http/Controllers/InvoiceControllerTest.php
+    - tests/Feature/Http/Controllers/ChildControllerTest.php
+    - app/Http/Requests/UserStoreRequest.php
+    - app/Http/Requests/UserUpdateRequest.php
+    - app/Http/Requests/AccountStoreRequest.php
+    - app/Http/Requests/AccountUpdateRequest.php
+    - app/Http/Requests/PlanStoreRequest.php
+    - app/Http/Requests/PlanUpdateRequest.php
+    - app/Http/Requests/InvoiceStoreRequest.php
+    - app/Http/Requests/InvoiceUpdateRequest.php
+    - app/Http/Requests/ChildStoreRequest.php
+    - app/Http/Requests/ChildUpdateRequest.php
+    - resources/views/user/index.blade.php
+    - resources/views/user/create.blade.php
+    - resources/views/user/show.blade.php
+    - resources/views/user/edit.blade.php
+    - resources/views/account/index.blade.php
+    - resources/views/account/create.blade.php
+    - resources/views/account/show.blade.php
+    - resources/views/account/edit.blade.php
+    - resources/views/plan/index.blade.php
+    - resources/views/plan/create.blade.php
+    - resources/views/plan/show.blade.php
+    - resources/views/plan/edit.blade.php
+    - resources/views/invoice/index.blade.php
+    - resources/views/invoice/create.blade.php
+    - resources/views/invoice/show.blade.php
+    - resources/views/invoice/edit.blade.php
+    - resources/views/child/index.blade.php
+    - resources/views/child/create.blade.php
+    - resources/views/child/show.blade.php
+    - resources/views/child/edit.blade.php
+updated:
+    - routes/web.php
+models:
+    User: { name: string, username: string, birth_day: timestamp, gender: string, nationality: string, sickness: string, approved_at: 'nullable timestamp', address: text, zip_code: string, residence: string, furnale_place: string, gsm: string, phone_number: string, mobile_number: string, relationships: { hasMany: Child, hasOne: Account, belongsToMany: Plan } }
+    Child: { user_id: 'id foreign', name: string, birth_day: timestamp, gender: string, relationships: { belongsTo: User } }
+    Account: { user_id: 'id foreign', owner: string, account_number: string, relationships: { belongsTo: User } }
+    Plan: { title: string, min_age: integer, max_age: integer, price: float, cycle: string, expire_at: timestamp, relationships: { belongsToMany: User } }
+    Invoice: { paid_at: 'nullable timestamp' }

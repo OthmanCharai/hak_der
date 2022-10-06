@@ -1,0 +1,58 @@
+models:
+  # ...
+  User: 
+    name: string
+    username : string
+    birth_day: timestamp
+    gender: string
+    nationality: string
+    sickness: string
+    approved_at: nullable timestamp
+    address: text
+    zip_code: string
+    residence: string
+    furnale_place: string
+    gsm: string
+    phone_number: string
+    mobile_number: string
+    relationships: 
+      hasMany: Child
+      hasOne: Account
+      belongsToMany: Plan
+      
+  Child:
+    user_id: id foreign
+    name: string
+    birth_day: timestamp
+    gender: string
+    relationships: 
+      belongsTo: User
+  Account:
+    user_id: id foreign
+    owner: string
+    account_number: string
+    relationships:
+      belongsTo: User
+  Plan:
+    title: string
+    min_age: integer
+    max_age: integer
+    price: float
+    cycle: string
+    expire_at: timestamp
+    relationships:
+      belongsToMany: User
+  Invoice: 
+    paid_at: nullable timestamp
+controllers:
+  # ...
+  User: 
+   resource
+  Account: 
+    resource
+  Plan:
+    resource
+  Invoice:
+    resource
+  Child: 
+    resource
