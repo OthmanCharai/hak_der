@@ -12,8 +12,7 @@ use JetBrains\PhpStorm\NoReturn;
 use LaravelDaily\Invoices\Invoice as DailyInvoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +36,6 @@ class InvoiceController extends Controller
                 "invoice_number" => Invoice::count(),
                 "paid_invoice" => count(Invoice::where('paid_at', '!=', null)->get()),
                 "pendding_invoice" => count(Invoice::where('paid_at', null)->get()),
-
 
             ]);
         }
@@ -201,7 +199,7 @@ class InvoiceController extends Controller
             ->join('plans', 'invoices.plan_id', 'plans.id')
             ->get();
 
-          
+
         return view('checkout.index', [
             'invoice' => $invoice,
 
@@ -209,13 +207,18 @@ class InvoiceController extends Controller
     }
 
      public function pay(Request $request){
-     
-        
-        
-
         $bill=Bill::create(['source_id'=>$request->stripeSource]);
 
-     
+    }
+
+    public function add_administration_fee(Request $request,Invoice $invoice):RedirectResponse{
+        $request->validate([
+            'administration_fee'=>'required'
+        ]);
+        $invoice->update([
+            'administration_fee'=>$request->administration_fee
+        ]);
+        return redirect()->back();
     }
 
 }

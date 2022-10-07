@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Imports\ChildImport;
 use App\Imports\UsersImport;
+use App\Jobs\ImportJob;
 use App\Models\Account;
 use App\Models\Invoice;
 use App\Models\User;
@@ -12,8 +14,10 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -67,8 +71,10 @@ class UserController extends Controller
     public function show(Request $request, User $user):View
     {
 
+        $invoice=Invoice::where('user_id',$user->id)->first();
         return view('user.show',[
-            'user'=>User::whereId($user->id)->with(['children','partner','account'])->first()
+            'user'=>User::whereId($user->id)->with(['children','partner','account'])->first(),
+            'invoice'=>$invoice->id,
         ]);
     }
 
@@ -164,7 +170,9 @@ class UserController extends Controller
             'user'=>$user,
             'invoices'=>DB::table('invoices')->select('invoices.*','plans.price')
                                                   ->join('plans','invoices.plan_id','plans.id')
-                                                  ->get()
+                                                ->where('user_id', Auth::user()->id)
+
+                                                   ->get()
         ]);
     }
 
@@ -183,17 +191,35 @@ class UserController extends Controller
         return redirect()->route('user.improved');
     }
 
-    public function import(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
-    {
-        try {
-            Excel::import(new UsersImport, $request->file('file'));
-            dd('okk');
+    public function import(Request $request):RedirectResponse{
 
-        }catch(\Exception $e){
-            dd('nonnn'.$e->getMessage());
+        if($request->file('member') && $request->file('children')){
+            //
+            try {
+                Excel::import(new UsersImport,$request->file('member') );
+                Excel::import(new ChildImport,$request->file('children'));
+                $request->session()->flash('message','we take care about your files');
+                return redirect()->route('importe');
+            }catch(\Exception $e){
+                dd('nonnn'.$e->getMessage());
+
+            }
 
         }
+        /*
+         *
+        */
 
+    }
+
+    /**
+     * @return View
+     */
+    public function profile():View{
+
+        return \view('profile.index',[
+            'user'=>User::whereId(Auth::user()->id)->with('children')->with('partner')->first(),
+        ]);
     }
 
 

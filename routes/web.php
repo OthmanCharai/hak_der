@@ -64,6 +64,7 @@ Auth::routes();
 Route::middleware(['auth','phone_or_email'])->group(function (){
     Route::resource('invoice', App\Http\Controllers\InvoiceController::class);
 
+
     Route::middleware('role:admin')->group(function(){
 
         Route::resource('user', App\Http\Controllers\UserController::class);
@@ -76,7 +77,6 @@ Route::middleware(['auth','phone_or_email'])->group(function (){
         Route::resource('child', App\Http\Controllers\ChildController::class);
 
 
-        Route::view('profile','profile.index')->name('profile');
 
         Route::view('importes','imports.index')->name('importe');
 
@@ -94,12 +94,17 @@ Route::middleware(['auth','phone_or_email'])->group(function (){
 
         Route::get('/dashboard',\App\Http\Controllers\HomeController::class)->name('home');
 
+        Route::post('/administration_fee/{invoice}',[\App\Http\Controllers\InvoiceController::class,'add_administration_fee'])->name('administration.fee');
+
 
     });
 
     Route::middleware('role:member')->group(function(){
-        //Route::resource('invoice', App\Http\Controllers\InvoiceController::class)->only('show','destroy','index');
+
         Route::get('member/dashboard',[\App\Http\Controllers\UserController::class,'member_dashboard'])->name('member.dashboard');
+        Route::get('profile',[\App\Http\Controllers\UserController::class,'profile'])->name('profile');
+
+
     });
 
 
@@ -113,7 +118,7 @@ Route::view('/verify/number','guest.verify-otp')->name('verify.otp');
 Route::post('verification/verify/mobile',[\App\Http\Controllers\Auth\VerifyMobileController::class,'__invoke'])->name('verification.verify.mobile');
 Route::post('verification/verify/email',[\App\Http\Controllers\Auth\VerifyMobileController::class,'__invoke'])->name('verification.verify');
 
-Route::post('/alllll',[\App\Http\Controllers\UserController::class,'import'])->name('importe.all');
+Route::post('/all',[\App\Http\Controllers\UserController::class,'import'])->name('importe.all');
 
 Route::get('payment/{invoice}',[\App\Http\Controllers\InvoiceController::class,'checkout'])->name('payment');
 

@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class UsersImport implements ToModel, WithChunkReading, ShouldQueue
+class UsersImport implements ToModel, WithChunkReading,WithBatchInserts, ShouldQueue
 {
     /**
     * @param array $row
@@ -36,21 +37,17 @@ class UsersImport implements ToModel, WithChunkReading, ShouldQueue
         ]);
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
 
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 100;
     }
 
-    /*public function rules(): array
+    public function batchSize(): int
     {
-        return [
-            '5' => ['required'],
-        ];
-    }*/
+        return 100;
+    }
+
+
 }

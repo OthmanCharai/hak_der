@@ -16,6 +16,10 @@ class Invoice extends Model
      */
     protected $fillable = [
         'paid_at',
+        'description',
+        'plan_id',
+        'user_id',
+        'administration_fee'
     ];
 
     /**

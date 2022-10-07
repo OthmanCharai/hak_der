@@ -32,14 +32,14 @@
                             <div class="text-xs text-theme-41">admin</div>
                         </div>
                         <div class="p-2">
-                            <a href="http://hak-der.nx.gg/profile" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="user" class="w-4 h-4 mr-2"></i> Profile </a>
+                            <a href="{{ route('profile') }}" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="user" class="w-4 h-4 mr-2"></i> Profile </a>
                         </div>
                         <div class="p-2">
-                            <a href="http://hak-der.nx.gg/member/import" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="navigation" class="w-4 h-4 mr-2"></i> Import </a>
+                            <a href="{{ route('importe') }}" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="navigation" class="w-4 h-4 mr-2"></i> Import </a>
                         </div>
                         <div class="p-2 border-t border-theme-40">
-                            <a href="http://hak-der.nx.gg/logout" onclick="event.preventDefault();  document.getElementById('logout-form').submit();" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="toggle-right" class="w-4 h-4 mr-2"></i>  Logout </a>
-                            <form id="logout-form" action="http://hak-der.nx.gg/logout" method="POST" style="display: none;">
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault();  document.getElementById('logout-form').submit();" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md"> <i data-feather="toggle-right" class="w-4 h-4 mr-2"></i>  Logout </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 <input type="hidden" name="_token" value="z3fjUb3uxletkfKaVsSpQinjESIzUceX7QqsdqIx">                            </form>
 
                         </div>
@@ -53,18 +53,34 @@
                 <h2 class="text-lg font-medium mr-auto">
                     Profile
                 </h2>
+                <div class="w-full sm:w-auto flex mt-4 sm:mt-0 ">
+                   
+                    <div class="w-full">
+                        <form action="{{ route('administration.fee',$invoice) }}" method="POST" >
+                            @csrf
+                            <label>Admin Fee </label>
+                            <input type="number" class="input  border bg-gray-100  mt-2" name='administration_fee' >
+                            <button class="button text-white bg-theme-1 shadow-md mr-2 ">Create Fee Invoice</button>
+                        </form>
+                    </div>
+                    
+               
+                </div>
             </div>
             <div class="grid grid-cols-12 gap-6">
+
+                
                 <!-- BEGIN: Profile Menu -->
                 <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
                     <div class="intro-y box mt-5">
+                        
                         <div class="relative flex items-center p-5">
                             <div class="w-12 h-12 image-fit">
                                 <img alt="Midone Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/profile-8.jpg') }}">
                             </div>
                             <div class="ml-4 mr-auto">
-                                <div class="font-medium text-base">Binali</div>
-                                <div class="text-gray-600">( 00000 )</div>
+                                <div class="font-medium text-base">{{ $user->username }}</div>
+                                <div class="text-gray-600">( {{ $user->age }} )</div>
                             </div>
                         </div>
                         <div class="p-5 border-t border-gray-200">
@@ -102,14 +118,16 @@
                         <div class="p-5">
                             <div class="grid grid-cols-12 gap-5">
                                 <div class="col-span-12 xl:col-span-6">
+                                   
                                     <div>
                                         <label>Partner Name </label>
-                                        <input type="text" class="input w-full border bg-gray-100 cursor-not-allowed mt-2" value="{{ $user->partner->partner_name }}"  disabled>
+                                        <input type="text" class="input w-full border bg-gray-100 cursor-not-allowed mt-2" value=" @if($user->partner) {{ $user->partner->partner_name }} @endif"  disabled>
                                     </div>
                                     <div>
                                         <label>Account Owner</label>
-                                        <input type="text" class="input w-full border bg-gray-100 cursor-not-allowed mt-2" value="{{ $user->account->owner }}"  disabled>
+                                        <input type="text" class="input w-full border bg-gray-100 cursor-not-allowed mt-2" value=" @if($user->account) {{ $user->account->owner }} @endif "  disabled>
                                     </div>
+                                    @if($user->children)
                                     @foreach ($user->children as $child)
                                     <div class="mt-3">
                                         <label>Child Name</label>
@@ -117,18 +135,20 @@
                                     </div>
                                         
                                     @endforeach
+                                    @endif
                                    
                                 </div>
                                 <div class="col-span-12 xl:col-span-6">
                                     <div>
                                         <label>Partner Date of Birth</label>
-                                        <input type="text" class="input w-full border mt-2"  value="{{ $user->partner->birth_day }}" disabled>
+                                        <input type="text" class="input w-full border mt-2"  value="@if($user->partner) {{ $user->partner->birth_day }} @endif" disabled>
                                     </div>
                                     <div>
                                         <label>Account Number</label>
-                                        <input type="text" class="input w-full border mt-2"  value="{{ $user->account->account_number }}" disabled>
+                                        <input type="text" class="input w-full border mt-2"  value="@if($user->account) {{ $user->account->account_number }} @endif" disabled>
                                     </div>
 
+                                    @if($user->children)
                                     @foreach ($user->children as $child)
                                  
                                     <div class="mt-3">
@@ -136,6 +156,7 @@
                                         <input type="text" class="input w-full border mt-2"  value="{{ $child->day }}" disabled>
                                     </div>
                                     @endforeach
+                                    @endif
                                   
                                 </div>
                             </div>
@@ -147,12 +168,18 @@
 
                             </div>
                             @endif
+
+                            
                         </div>
-                     
+
+                        
+                       
                       
                     </div>
                     <!-- END: Personal Information -->
                 </div>
+
+                
               
 
                 
