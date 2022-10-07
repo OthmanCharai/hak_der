@@ -22,6 +22,8 @@ class User extends Authenticatable implements IMustVerifyMobile,MustVerifyEmail
 {
     use HasFactory, Notifiable,HasRoles,MustVerifyMobile,Billable;
 
+    protected $appends=['age'];
+
     protected $fillable = [
         'name',
         'email',
@@ -103,7 +105,7 @@ class User extends Authenticatable implements IMustVerifyMobile,MustVerifyEmail
      */
     public function plans():BelongsToMany
     {
-        return $this->belongsToMany(Plan::class,'invoices','plan_id','user_id')->withPivot('paid_at','description')->withTimestamps();
+        return $this->belongsToMany(Plan::class,'invoices','user_id','plan_id')->withPivot('description')->withTimestamps();
     }
 
     /**
@@ -115,6 +117,10 @@ class User extends Authenticatable implements IMustVerifyMobile,MustVerifyEmail
     {
            return Carbon::parse($this->birth_day)->format('d/m/Y');
 
+    }
+
+    public function  getAgeAttribute(){
+        return  Carbon::parse($this->birth_day)->age;
     }
 
     /**
