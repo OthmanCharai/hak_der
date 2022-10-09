@@ -9,8 +9,11 @@
     <meta name="keywords" content="admin template, Midone admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="LEFT4CODE">
     <title>Login - Hak Der</title>
+    
+
     <!-- BEGIN: CSS Assets-->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('app.css') }}">
+    <script src="{{ asset('build/assets/app.f22ee3d3.js') }}"></script>
     <!-- END: CSS Assets-->
 </head>
 <!-- END: Head -->

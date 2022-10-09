@@ -10,6 +10,7 @@ use App\Imports\UsersImport;
 use App\Jobs\ImportJob;
 use App\Models\Account;
 use App\Models\Invoice;
+use App\Models\Partner;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\Foreach_;
 
 class UserController extends Controller
 {
@@ -58,7 +60,7 @@ class UserController extends Controller
 
 
         $user->accounts()->save(new Account($request->only('owner','account_number')));
-        dd($request->children);
+
         $request->session()->flash('user.id', $user->id);
 
         return redirect()->route('user.index');
@@ -96,13 +98,43 @@ class UserController extends Controller
      * @param User $user
      * @return Response
      */
-    public function update(UserUpdateRequest $request, User $user):RedirectResponse
-    {
-        dd('jjj');
-        $user->update($request->validated());
 
-        $request->session()->flash('user.id', $user->id);
+    public function update(Request $request, User $user):RedirectResponse
+    {  
+        $user->name=$request->name;
+        $user->address=$request->address;
+        $user->gender=$request->gender;
+        if($request->birth_day){
+         $user->birth_day=$request->birth_day;
+        }
+      
+        $user->phone_number=$request->phone_number;
+        $user->zip_code=$request->zip_code;
+        $user->sickness=$request->sickness;
+        $user->furnale_place=$request->furnale_place;
+        $user->birth_place=$request->birth_place; 
+        $user->update();
+ 
+        $partner=Partner::where('user_id',$user->id)->first();
+        $partner->partner_name=$request->partner_name;
+        if($request->partner_birth_day){
+         $partner->partner_birth_day=$request->partner_birth_day;
+        }
+      
+        $partner->partner_sickness=$request->partner_sickness;
+        $partner->partner_birth_place=$request->partner_birth_place;
+        $partner->partner_furnal_place=$request->partner_furnal_place;
+       $partner->update();
 
+      $i=0;
+      foreach ($user->children as $child) {
+        $child->name=$request->children[$i];
+        if($request->child_birth_day[$i]){
+        $child->birth_day=$request->child_birth_day[$i];
+        }
+        $child->update();
+        $i=$i+1;
+      }
         return redirect()->route('user.index');
     }
 
