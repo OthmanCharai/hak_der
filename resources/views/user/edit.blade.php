@@ -6,8 +6,7 @@
     <!-- BEGIN: Content -->
     <div class="content">
         <form method="POST" action="{{ route('user.update', $user) }}" accept-charset="UTF-8" class="form-horizontal"
-            enctype="multipart/form-data"><input name="_method" type="hidden" value="PATCH"><input name="_token"
-                type="hidden" value="PsG6ej0Ngm7lfKJWROoC0sF1njj6Lidfr47O1gLa">
+            enctype="multipart/form-data">
 
 
             <div class="intro-y flex items-center mt-8">

@@ -90,6 +90,7 @@ Route::middleware(['auth','phone_or_email'])->group(function (){
 
         Route::get('downloads/{invoice}',[\App\Http\Controllers\InvoiceController::class,'download'])->name('downloads');
 
+
         Route::get('users/unimproved',[\App\Http\Controllers\UserController::class,'get_unimproved_users'])->name('user.unimproved');
 
         Route::get('/dashboard',\App\Http\Controllers\HomeController::class)->name('home');

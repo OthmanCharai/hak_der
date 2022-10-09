@@ -42,7 +42,7 @@ class HandleSucceededCharge implements ShouldQueue
 
         $user->notify(new SendOrderNotification($user->username,$this->webhookCall->payload['data']['object']['id']));
 
-       // $user->newsubscription('default','price_yearly')->createAndSendInvoice();
+        $user->newsubscription('default','price_yearly')->createAndSendInvoice();
        // $user->newSubscription('default', 'price_yearly')->create($this->webhookCall->payload['data']['object']['id']);
 
     }

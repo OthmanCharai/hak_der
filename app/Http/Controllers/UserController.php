@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MemberApproved;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Imports\ChildImport;
@@ -96,8 +97,8 @@ class UserController extends Controller
      * @return Response
      */
     public function update(UserUpdateRequest $request, User $user):RedirectResponse
-
     {
+        dd('jjj');
         $user->update($request->validated());
 
         $request->session()->flash('user.id', $user->id);
@@ -136,6 +137,7 @@ class UserController extends Controller
 
             $user->approved_at=Carbon::now()->toDateTimeString();
             $user->save();
+            event(new MemberApproved($user));
             $request->session()->flash('message','user approved with success');
             return redirect()->route('user.improved');
         }catch (\Exception $e){
