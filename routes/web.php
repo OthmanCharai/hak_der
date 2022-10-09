@@ -56,7 +56,7 @@ Route::get('/invoice/show',function(){
  */
 
 
-Route::post('/pay/invoice',[\App\Http\Controllers\InvoiceController::class,'pay'])->name('pay');
+Route::get('/pay/invoice/{invoice}',[\App\Http\Controllers\InvoiceController::class,'pay'])->name('pay');
 
 
 Auth::routes();

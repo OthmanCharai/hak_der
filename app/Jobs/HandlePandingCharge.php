@@ -2,17 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\Bill;
+use App\Models\User;
+use App\Notifications\PanddingChargeSend;
+use App\Notifications\SendOrderNotification;
 use Illuminate\Bus\Queueable;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Spatie\WebhookClient\Models\WebhookCall;
-use Stripe\Charge;
-use Stripe\Stripe;
 
-class HandleChargeableSource implements ShouldQueue
+class HandlePandingCharge implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,7 +22,6 @@ class HandleChargeableSource implements ShouldQueue
      *
      * @return void
      */
-    /** @va WebhookCall */
     public $webhookCall;
     public function __construct(WebhookCall $webhookCall)
     {
@@ -35,19 +35,11 @@ class HandleChargeableSource implements ShouldQueue
      */
     public function handle()
     {
-        $bill = Bill::where('source_id',$this->webhookCall->payload['data']['object']['id'])->firstOrFail();
-        Bill::create(['source_id'=>$this->webhookCall->payload['type']]);
-        try {
+        //
+        $charge=$this->webhookCall->payload['data']['object'];
 
-            Bill::create(['source_id'=>'dazet']);
+        $user=User::where('stripe_id',$charge['customer'])->first();
 
-           // $bill->update(['source_id' => $charge->id]);
-
-        }catch(\Exception $e){
-        }
-
-
-
-
+        $user->notify(new PanddingChargeSend($user->username,$this->webhookCall->payload['data']['object']['id']));
     }
 }

@@ -294,10 +294,10 @@
                     </div>
                     <div class="p-5" id="input">
                         <div class="preview">
-                            <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" id="payment-form"
+                            <form method="POST" action="" accept-charset="UTF-8" id="payment-form"
                                 class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" name="invoice_id" value="{{ $invoice[0]->id }}" id="">
+                                <input type="hidden" name="invoice_id" value="{{ $invoice }}" id="">
                                 <input type="hidden" name='payment_method' id="payment_method">
                                 <div>
                                     <label for="name">Name</label>
@@ -310,7 +310,7 @@
                                 </div>
                              
                                 <button  id='submit-btn'
-                                    class=' mt-8 text-white bg-theme-1 shadow-md mr-2'>Pay {{ $invoice[0]->price }}
+                                    class=' mt-8 text-white bg-theme-1 shadow-md mr-2'>Pay {{ $price }}
                                     $</button>
                                 {{-- <input type="hidden" name="member_id" value="1363">
                                 <input type="hidden" name="invoice_id" value="21">
@@ -375,7 +375,7 @@
         var elements = stripe.elements({});
         var idealBank = elements.create('idealBank');
         idealBank.mount('#ideal-bank-element');
-        var submit_form = document.getElementById('payment-form');
+         var submit_form = document.getElementById('payment-form');
         var submit_btn = document.getElementById('submit-btn');
         var name=document.getElementById('name')
         var payment_method=document.getElementById('payment_method');
@@ -383,17 +383,15 @@
         submit_form.addEventListener('submit', function(e) {
             e.preventDefault()
             submit_btn.disabled = true;
-            stripe.confirmIdealPayment(
+             stripe.confirmIdealPayment(
                 '{{ $intent->client_secret }}', {
-                    
-           
                     payment_method: {
                         ideal: idealBank,
                         billing_details: {
                             name: name.value,
                         },
                     },
-                    return_url:"{{ route('pay') }}",
+                    return_url:"{{ route('pay',$invoice) }}",
                 }
             ).then(function(result){
                 if(result.error){
@@ -404,8 +402,9 @@
 
                 }
 
-            });
-        })
+            }); 
+        }) 
+        
     </script>
     <script>
         /** add active class and stay opened when selected */
