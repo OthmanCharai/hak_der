@@ -87,7 +87,7 @@
                             </div>
 
                             <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                                <a href="http://hak-der.nx.gg/invoices">
+                                <a href="{{ route('invoice.index') }}">
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">
@@ -102,7 +102,7 @@
                                 </a>
                             </div>
                             <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                                <a href="http://hak-der.nx.gg/paid-invoices">
+                                <a href="{{ route('invoice.paid') }}">
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">
@@ -117,7 +117,7 @@
                                 </a>
                             </div>
                             <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
-                                <a href="http://hak-der.nx.gg/UnPaidInvoices">
+                                <a href="{{ route('invoice.inpaid') }}">
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">

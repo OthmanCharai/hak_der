@@ -5,11 +5,11 @@
 
     <!-- BEGIN: Content -->
     <div class="content">
-        <form method="POST" action="{{ route('user.update', $user) }}" accept-charset="UTF-8" class="form-horizontal"
-            enctype="multipart/form-data"><input name="_method" type="hidden" value="PATCH"><input name="_token"
-                type="hidden" value="PsG6ej0Ngm7lfKJWROoC0sF1njj6Lidfr47O1gLa">
-
-
+        <form action="{{ route('user.update', $user) }}" method="POST"  class="form-horizontal" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+        
+        
             <div class="intro-y flex items-center mt-8">
                 <h2 class="text-lg font-medium mr-auto">
                     Registration Form
@@ -31,12 +31,12 @@
 
                                 <div class="mt-3">
                                     <label>Name</label>
-                                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                                    <input type="text" required name="name" value="{{ old('name', $user->name) }}"
                                         class="input w-full border mt-2" placeholder="Name">
                                 </div>
                                 <div class="mt-3">
                                     <label>Date of birth</label>
-                                    <input type="date" name="birth_day" value="{{ $user->get_birth_day() }}"
+                                    <input type="date"  name="birth_day" value="{{ $user->get_birth_day() }}"
                                         class="input w-full border mt-2" placeholder="Date of birth">
                                 </div>
                                 <div class="mt-3"> <label>Sex </label>
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="mt-3">
                                     <label>Phone Number</label>
-                                    <input type="text" name="phone_number" value="{{ old('phone', $user->phone_number) }}"
+                                    <input type="text" required name="phone_number" value="{{ old('phone', $user->phone_number) }}"
                                         class="input w-full border mt-2" placeholder="Phone Number">
                                 </div>
                             </div>
@@ -79,8 +79,13 @@
                                 @foreach ($user->children as $child)
                                     <div class='mt-5'>
                                         <label>Child Name</label>
-                                        <input type="text" name="children[]" value="{{ $child->name }}"
+                                        <input type="text" required name="children[]" value="{{ $child->name }}"
                                             class="input w-full border mt-2" placeholder="Child Name">
+                                    </div>
+                                    <div class='mt-5'>
+                                        <label>Child Birth Day </label>
+                                        <input type="date" name="child_birth_day[]" value="{{ $child->day }}"
+                                            class="input w-full border mt-2" placeholder="Child Three ">
                                     </div>
                                 @endforeach
 
@@ -113,17 +118,17 @@
 
                                 <div>
                                     <label>Address</label>
-                                    <input type="text" name="address" value="{{ old('address', $user->address) }}"
+                                    <input type="text" required name="address" value="{{ old('address', $user->address) }}"
                                         class="input w-full border mt-2" placeholder="Address">
                                 </div>
                                 <div class="mt-3">
                                     <label>Post code</label>
-                                    <input type="text" name="zip_code" value="{{ old('zip_code', $user->zip_code) }}"
+                                    <input type="text" required name="zip_code" value="{{ old('zip_code', $user->zip_code) }}"
                                         class="input w-full border mt-2" placeholder="Postcode">
                                 </div>
                                 <div class="mt-3">
                                     <label>Sickness</label>
-                                    <input type="text" name="sickness" value="{{ old('sickness', $user->sickness) }}"
+                                    <input type="text" required name="sickness" value="{{ old('sickness', $user->sickness) }}"
                                         class="input w-full border mt-2" placeholder="Postcode">
                                 </div>
                                 <div class="mt-3">
@@ -149,12 +154,12 @@
                             <div class="preview">
                                 <div>
                                     <label>Partner Name </label>
-                                    <input type="text" name="partner_namr" value="{{ $user->partner->partner_name }}"
+                                    <input type="text" required name="partner_name" value="{{ $user->partner->partner_name }}"
                                         class="input w-full border mt-2" placeholder="Name ">
                                 </div>
                                 <div class="mt-3">
                                     <label>Partner Date of Birth</label>
-                                    <input type="text" name="partner_birth_day"
+                                    <input type="date" name="partner_birth_day"
                                         value="{{ $user->partner->birth_day }}"
                                         class="datepicker input w-full border mt-2" placeholder="Partner Date of Birth">
                                 </div>
@@ -166,14 +171,14 @@
                                 </div>
                                 <div class="mt-3">
                                     <label>Partner Date of Birth</label>
-                                    <input type="text" name="partner_birth_place"
+                                    <input type="text" required name="partner_birth_place"
                                         value="{{ $user->partner->partner_birth_place }}"
                                         class="input w-full border mt-2" placeholder="Partner Date of Birth">
                                 </div>
 
                                 <div class="mt-3">
                                     <label>Partner Furnal Place</label>
-                                    <input type="text" name="partner_furnal_place"
+                                    <input type="text" required name="partner_furnal_place"
                                         value="{{ $user->partner->partner_furnal_place }}"
                                         class="input w-full border mt-2" placeholder="Partner Date of Birth">
                                 </div>
@@ -187,21 +192,7 @@
 
 
                     <!-- BEGIN: Input Sizing -->
-                    <div class="intro-y box mt-5">
-                        <div class="p-5" id="input">
-                            <div class="preview">
-                                @foreach ($user->children as $child)
-                                    <div class='mt-5'>
-                                        <label>Child Birth Day </label>
-                                        <input type="text" name="child_birth_day[]" value="{{ $child->day }}"
-                                            class="input w-full border mt-2" placeholder="Child Three ">
-                                    </div>
-                                @endforeach
-
-
-                            </div>
-                        </div>
-                    </div>
+               
                     <div class="intro-y box mt-5">
                         <div class="p-5" id="input">
                         <div class="preview">
@@ -228,7 +219,7 @@
 
 
                 <div class="row">
-                    <button class="button w-24 inline-block mr-1 mb-2 border border-theme-12 text-theme-12">Submit</button>
+                    <button type="submit" class="button w-24 inline-block mr-1 mb-2 border border-theme-12 text-theme-12">Submit</button>
 
                 </div>
             </div>
