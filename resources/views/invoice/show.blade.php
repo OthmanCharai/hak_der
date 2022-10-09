@@ -126,12 +126,13 @@
                 </div>
                 <div class="text-center sm:text-right sm:ml-auto">
                     <div class="text-base text-gray-600">Subscription Charges :</div>
-                    <div class="text-1xl text-theme-1 font-medium mt-1">Sub Total : € {{ $invoice[0]->price }}</div>
+                    <div class="text-1xl text-theme-1 font-medium mt-1">Sub Total : € {{ $invoice[0]->price+$invoice['0']->administration_fee }}</div>
                     <div class="text-1xl text-theme-1 font-medium mt-1">Free Trial Discount : € 0.00</div>
-                    <div class="text-xl text-theme-1 font-medium mt-2">dash.Total : € {{ $invoice[0]->price }}</div>
+                    <div class="text-xl text-theme-1 font-medium mt-2">dash.Total : € {{ $invoice[0]->price+$invoice['0']->administration_fee }}</div>
                     <div class="mt-1 tetx-xs">Taxes included</div>
                 </div>
             </div>
+            
             <div class="px-5 sm:px-20 pb-10 sm:pb-20 flex flex-col-reverse sm:flex-row">
                 <a href="{{ route('payment', $invoice[0]->id ) }}" class="button bg-theme-1 text-white ">Sepa Direct Debit( Pay Now
                     )</a>

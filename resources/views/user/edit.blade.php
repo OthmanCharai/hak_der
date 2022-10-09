@@ -5,11 +5,13 @@
 
     <!-- BEGIN: Content -->
     <div class="content">
+
         <form action="{{ route('user.update', $user) }}" method="POST"  class="form-horizontal" enctype="multipart/form-data">
             @csrf
             @method('PUT')
         
         
+
             <div class="intro-y flex items-center mt-8">
                 <h2 class="text-lg font-medium mr-auto">
                     Registration Form

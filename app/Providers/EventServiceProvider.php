@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\MemberApproved;
+use App\Listeners\MemberApprovedListnner;
 use App\Listeners\SendMobileVerificationNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -20,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             SendMobileVerificationNotification::class
         ],
+        MemberApproved::class=>[
+            MemberApprovedListnner::class
+        ]
     ];
 
     /**
