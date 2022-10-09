@@ -156,12 +156,13 @@
                             <td class="border-b"> {{ $invoice->phone_number }} </td>
                             <td class="border-b">{{ $invoice->price }}</td>
                             <td class="border-b">
-                                <a href="{{ route('invoice.show', $invoice->id) }}">
-                                    <i data-feather="eye" class="w-4 h-4 mr-2" style="display: inline; color: #28a745"></i>
+                                <a href="{{ route('invoice.show', $invoice->id) }}" class="btn btn-danger">
+                                    edit
                                 </a>
                                 <form method="POST" action="{{ route('invoice.destroy', $invoice->id) }}"
                                     accept-charset="UTF-8" style="display:inline">
                                   @csrf
+                                  @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"
                                         onclick='
                                                         if(confirm("Are you sure?") == false) {
@@ -169,8 +170,7 @@
                                                         } else {
                                                             //
                                                         }'>
-                                        <i data-feather="trash-2" class="w-4 h-4 mr-2"
-                                            style="display: inline; color: #a71e06"></i>
+                                      delete
                                     </button>
                                 </form>
 
