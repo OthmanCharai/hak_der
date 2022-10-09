@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SendOrderNotification extends Notification
+class PanddingChargeSend extends Notification
 {
     use Queueable;
 
@@ -16,14 +16,13 @@ class SendOrderNotification extends Notification
      *
      * @return void
      */
-
     public $name;
-    public $invoice;
-    public function __construct($name,$invoice)
+    public $price;
+    public function __construct($name,$price)
     {
         //
+        $this->price=$price;
         $this->name=$name;
-        $this->invoice=$invoice;
     }
 
     /**
@@ -46,10 +45,10 @@ class SendOrderNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                  ->view('emails.payment',[
-                      'name'=>$this->name,
-                      'price'=>$this->invoice
-                  ]);
+                   ->view('emails.failed',[
+                       'name'=>$this->name,
+                       'price'=>$this->price
+                   ]);
     }
 
     /**

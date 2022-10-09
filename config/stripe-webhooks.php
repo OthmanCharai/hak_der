@@ -1,5 +1,8 @@
 <?php
 
+use App\Jobs\HandleChargeableSource;
+use App\Jobs\HandleSucceededCharge;
+
 return [
     /*
      * Stripe will sign each webhook using a secret. You can find the used secret at the
@@ -22,8 +25,9 @@ return [
      * https://stripe.com/docs/api#event_types.
      */
     'jobs' => [
-         //'source_chargeable' => \App\Jobs\HandleChargeableSource::class,
-        'charge_pending'=>\App\Jobs\HandleSucceededCharge::class,
+        'source_chargeable' => HandleChargeableSource::class,
+        'charge_succeeded' => HandleSucceededCharge::class,
+        'charge_pending'=>\App\Jobs\HandlePandingCharge::class
     ],
 
     /*

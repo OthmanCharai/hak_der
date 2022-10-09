@@ -6,14 +6,14 @@ use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Bill;
 use App\Models\Invoice;
+use App\Notifications\SendOrderNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\NoReturn;
 use LaravelDaily\Invoices\Invoice as DailyInvoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
+
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +37,6 @@ class InvoiceController extends Controller
                 "invoice_number" => Invoice::count(),
                 "paid_invoice" => count(Invoice::where('paid_at', '!=', null)->get()),
                 "pendding_invoice" => count(Invoice::where('paid_at', null)->get()),
-
 
             ]);
         }
@@ -196,26 +195,43 @@ class InvoiceController extends Controller
 
     public function checkout(Invoice $invoice):View
     {
-        $invoice=DB::table('invoices')->select('invoices.id', 'plans.price')
+
+        $invoice=DB::table('invoices')->select('invoices.id','invoices.administration_fee', 'plans.price')
             ->where('invoices.id',$invoice->id)
             ->join('plans', 'invoices.plan_id', 'plans.id')
-            ->get();
+            ->first();
 
-          
-        return view('checkout.index', [
-            'invoice' => $invoice,
+        $user = Auth::user();
+        $stripeCustomer = $user->createOrGetStripeCustomer();
+
+
+        $stripeIntent = $user->payWith($invoice->price+$invoice->administration_fee,['ideal'],['customer'=>$stripeCustomer->id]);
+
+
+        return view('payments.index', [
+            'price'=>$invoice->price+$invoice->administration_fee,
+            'invoice' => $invoice->id,
+            'intent' =>$stripeIntent
+
 
         ]);
     }
 
-     public function pay(Request $request){
-     
-        
-        
+     public function pay(Request $request,Invoice $invoice){
 
-        $bill=Bill::create(['source_id'=>$request->stripeSource]);
+        $invoice->paid_at=now();
+        return redirect()->route('thanks');
 
-     
+     }
+
+    public function add_administration_fee(Request $request,Invoice $invoice):RedirectResponse{
+        $request->validate([
+            'administration_fee'=>'required'
+        ]);
+        $invoice->update([
+            'administration_fee'=>$request->administration_fee
+        ]);
+        return redirect()->back();
     }
 
 }
