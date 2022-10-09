@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Spatie\WebhookClient\Models\WebhookCall;
 
 class HandleSucceededCharge implements ShouldQueue
@@ -35,9 +36,14 @@ class HandleSucceededCharge implements ShouldQueue
      */
     public function handle()
     {
-        Bill::create(['source_id'=>'sssssssssss']);
+        $charge=$this->webhookCall->payload['data']['object'];
 
+        $user=User::where('stripe_id',$charge['customer'])->first();
 
+        $user->notify(new SendOrderNotification($user->username,$this->webhookCall->payload['data']['object']['id']));
+
+       // $user->newsubscription('default','price_yearly')->createAndSendInvoice();
+       // $user->newSubscription('default', 'price_yearly')->create($this->webhookCall->payload['data']['object']['id']);
 
     }
 }
