@@ -25,19 +25,17 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'username' => ['required', 'string'],
+       
             'birth_day' => ['required'],
             'gender' => ['required', 'string'],
             'nationality' => ['required', 'string'],
             'sickness' => ['required', 'string'],
-            'approved_at' => [''],
+        
             'address' => ['required', 'string'],
             'zip_code' => ['required', 'string'],
             'residence' => ['required', 'string'],
             'furnale_place' => ['required', 'string'],
-            'gsm' => ['required', 'string'],
-            'phone_number' => ['required', 'string'],
-            'mobile_number' => ['required', 'string'],
+          
         ];
     }
 }

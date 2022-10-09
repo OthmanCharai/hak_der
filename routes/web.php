@@ -58,7 +58,8 @@ Route::get('/invoice/show',function(){
 
 Route::post('/pay/invoice',[\App\Http\Controllers\InvoiceController::class,'pay'])->name('pay');
 
-
+Route::resource('user', App\Http\Controllers\UserController::class);
+Route::put("/aaa/{user}" , [\App\Http\Controllers\UserController::class,'update'])->name("user.update2");
 Auth::routes();
 
 Route::middleware(['auth','phone_or_email'])->group(function (){
@@ -66,7 +67,6 @@ Route::middleware(['auth','phone_or_email'])->group(function (){
 
     Route::middleware('role:admin')->group(function(){
 
-        Route::resource('user', App\Http\Controllers\UserController::class);
 
         Route::resource('account', App\Http\Controllers\AccountController::class);
 

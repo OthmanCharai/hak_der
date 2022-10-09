@@ -23,7 +23,7 @@
 <!-- BEGIN: Account Menu -->
             <div class="intro-x dropdown w-8 h-8 relative">
                 <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in">
-                    <img alt="Midone Tailwind HTML Admin Template" src="{{ asset('dist/images/profile-12.jpg') }}">
+                    <img alt="Midone Tailwind HTML Admin Template" src="{{ asset('/images/avatar.jpg') }}">
                 </div>
                 <div class="dropdown-box mt-10 absolute w-56 top-0 right-0 z-20">
                     <div class="dropdown-box__content box bg-theme-38 text-white">
@@ -60,7 +60,7 @@
                     <div class="intro-y box mt-5">
                         <div class="relative flex items-center p-5">
                             <div class="w-12 h-12 image-fit">
-                                <img alt="Midone Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/profile-8.jpg') }}">
+                                <img alt="Midone Tailwind HTML Admin Template" class="rounded-full" src="{{ asset('images/avatar.jpg') }}">
                             </div>
                             <div class="ml-4 mr-auto">
                                 <div class="font-medium text-base">Binali</div>
