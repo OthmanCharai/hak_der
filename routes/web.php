@@ -56,7 +56,7 @@ Route::get('/invoice/show',function(){
  */
 
 
-Route::get('/pay/invoice/{invoice}',[\App\Http\Controllers\InvoiceController::class,'pay'])->name('pay');
+Route::post('/pay/invoice/{invoice}',[\App\Http\Controllers\InvoiceController::class,'pay'])->name('pay');
 
 Route::resource('user', App\Http\Controllers\UserController::class);
 Route::put("/aaa/{user}" , [\App\Http\Controllers\UserController::class,'update'])->name("user.update2");

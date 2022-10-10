@@ -294,11 +294,12 @@
                     </div>
                     <div class="p-5" id="input">
                         <div class="preview">
-                            <form method="POST" action="" accept-charset="UTF-8" id="payment-form"
+                            <form method="POST" action="{{ route('pay',$invoice) }}" accept-charset="UTF-8" id="payment-form"
                                 class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="invoice_id" value="{{ $invoice }}" id="">
                                 <input type="hidden" name='payment_method' id="payment_method">
+                                <input type="hidden" name='price' value="{{ $price }}">
                                 <div>
                                     <label for="name">Name</label>
                                     <input id="name" name="name" value="Test" placeholder="Jenny Rosen"
@@ -312,36 +313,7 @@
                                 <button  id='submit-btn'
                                     class=' mt-8 text-white bg-theme-1 shadow-md mr-2'>Pay {{ $price }}
                                     $</button>
-                                {{-- <input type="hidden" name="member_id" value="1363">
-                                <input type="hidden" name="invoice_id" value="21">
-                                <div>
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="Test" placeholder="Jenny Rosen"
-                                        required="" class="input w-full border mt-2" placeholder="Input text">
-                                </div>
-                                <div class="mt-3">
-                                    <label for="email">Email </label>
-                                    <input id="email" name="email" value="bajaj@gmail.com" type="email"
-                                        placeholder="jenny.rosen@example.com" required=""
-                                        class="input w-full border mt-2" placeholder="Input text">
-                                </div>
-                                <div class="mt-3">
-                                    <label for="iban-element">IBAN</label>
-                                    <div id="iban-element"
-                                        class="StripeElement StripeElement--empty input w-full border mt-2"></div>
-                                </div>
-
-                                <div class="mt-5 pb-5">
-                                    <div id="bank-name" class="text-success pt-3"></div>
-                                </div>
-
-                                <div class="mt-5 pb-5">
-                                    <button type="submit" class="button bg-theme-1 text-white">Sepa Direct Debit( Submit
-                                        Now )</button>
-                                </div>
-                                <div class="mt-5 pb-5">
-                                    <div id="error-message" role="alert" class="text-danger pt-3"></div><br>
-                                </div> --}}
+                               
                                 <div id="mandate-acceptance " class='mt-8'>
                                     <p>
                                         By providing your IBAN and confirming this payment, you are
@@ -383,26 +355,7 @@
         submit_form.addEventListener('submit', function(e) {
             e.preventDefault()
             submit_btn.disabled = true;
-             stripe.confirmIdealPayment(
-                '{{ $intent->client_secret }}', {
-                    payment_method: {
-                        ideal: idealBank,
-                        billing_details: {
-                            name: name.value,
-                        },
-                    },
-                    return_url:"{{ route('pay',$invoice) }}",
-                }
-            ).then(function(result){
-                if(result.error){
-                   console.log(result.error);
-                }else{
-                    payment_method.value=result.setupIntent.payment_method;
-                    this.submit();
-
-                }
-
-            }); 
+            this.submit();
         }) 
         
     </script>
