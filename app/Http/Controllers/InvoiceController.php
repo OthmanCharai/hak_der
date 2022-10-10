@@ -6,10 +6,9 @@ use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Bill;
 use App\Models\Invoice;
-use App\Notifications\SendOrderNotification;
+use Laravel\Cashier\Cashier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use JetBrains\PhpStorm\NoReturn;
 use LaravelDaily\Invoices\Invoice as DailyInvoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
@@ -17,8 +16,7 @@ use LaravelDaily\Invoices\Classes\InvoiceItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Stripe\Charge;
-use Stripe\Stripe;
+
 
 class InvoiceController extends Controller
 {
@@ -201,26 +199,35 @@ class InvoiceController extends Controller
             ->join('plans', 'invoices.plan_id', 'plans.id')
             ->first();
 
-        $user = Auth::user();
-        $stripeCustomer = $user->createOrGetStripeCustomer();
+        //$user = Auth::user();
 
 
-        $stripeIntent = $user->payWith($invoice->price+$invoice->administration_fee,['ideal'],['customer'=>$stripeCustomer->id]);
-
+       
+       // $stripeIntent = $user->payWith($invoice->price+$invoice->administration_fee,['ideal']);
 
         return view('payments.index', [
             'price'=>$invoice->price+$invoice->administration_fee,
             'invoice' => $invoice->id,
-            'intent' =>$stripeIntent
-
-
+           // 'intent' =>$stripeIntent
         ]);
     }
 
      public function pay(Request $request,Invoice $invoice){
 
-        $invoice->paid_at=now();
-        return redirect()->route('thanks');
+
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_KEY'));
+        $source = \Stripe\Source::create([
+            'type' => 'ideal',
+            'amount' => $request->price,
+            'currency' => 'eur',
+            'owner' => ['email' => Auth::user()->email],
+            'redirect' => ['return_url' => route('thanks')],
+        ]);
+
+        Bill::create(['source_id'=>$source->id,'amount'=>$request->price]);
+        return redirect($source->redirect->url);
+    
 
      }
 

@@ -36,18 +36,13 @@ class HandleChargeableSource implements ShouldQueue
     public function handle()
     {
         $bill = Bill::where('source_id',$this->webhookCall->payload['data']['object']['id'])->firstOrFail();
-        Bill::create(['source_id'=>$this->webhookCall->payload['type']]);
-        try {
-
-            Bill::create(['source_id'=>'dazet']);
-
-           // $bill->update(['source_id' => $charge->id]);
-
-        }catch(\Exception $e){
-        }
-
-
-
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $charge = Charge::create([
+            'amount' => $bill->price,
+            'currency' => 'eur',
+            'source' => $bill->source_id
+        ]);
+        $bill->update(['charge_id' => $charge->id]);
 
     }
 }
