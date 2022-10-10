@@ -225,7 +225,7 @@ class InvoiceController extends Controller
             'redirect' => ['return_url' => route('thanks')],
         ]);
 
-        Bill::create(['source_id'=>$source->id,'amount'=>$request->price]);
+        Bill::create(['source_id'=>$source->id,'amount'=>$request->price,'invoice_id'=>$request->invoice_id]);
         return redirect($source->redirect->url);
     
 

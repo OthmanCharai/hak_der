@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Bill;
+use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -42,6 +43,9 @@ class HandleChargeableSource implements ShouldQueue
             'currency' => 'eur',
             'source' => $bill->source_id
         ]);
+        $invoice=Invoice::whereId($bill->invoice_id)->first();
+        $invoice->paid_at=now();
+        $invoice->save();
         $bill->update(['charge_id' => $charge->id]);
 
     }
